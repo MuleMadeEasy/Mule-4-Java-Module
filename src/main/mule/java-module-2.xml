@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+	<flow name="java-module_static" doc:id="a6caaddb-f17e-4ac3-b368-9a9e4e2a3043" >
+		<http:listener doc:name="Listener" doc:id="c564b0f4-ed9c-4858-a839-a2f43e5ace4f" config-ref="HTTP_Listener_config" path="/test2"/>
+		<java:invoke-static doc:name="formatName" doc:id="edc6d821-2c11-45ff-bf46-71228a56dd7f" class="com.mme.api.Utils" method="formatName(String, String, String)" target="formattedName">
+			<java:args ><![CDATA[#[{
+	firstName: "Joshua",
+	lastName: "Erney",
+	middleName: "Alfred"
+}]]]></java:args>
+		</java:invoke-static>
+		<logger level="INFO" doc:name="Name" doc:id="4f38da23-a2ce-4526-9938-47155f3c8f89" message="Formatted name is: #[vars.formattedName]"/>
+	</flow>
+	<flow name="java-module-2Flow" doc:id="73fc80e4-3a04-4dd4-bdde-fbc3fd0976d1" >
+		<http:listener doc:name="Listener" doc:id="1481b14e-4aac-416d-888a-778767bc10bf" config-ref="HTTP_Listener_config" path="/test3"/>
+		<java:new doc:name="ToyotaCamry" doc:id="2e367255-aeef-4360-a5b5-8e6c908b3db0" class="com.mme.api.ToyotaCamry" constructor="ToyotaCamry()" target="car"/>
+		<java:validate-type doc:name="Validate type" doc:id="f780952e-4499-42e8-a849-442ed5584cb3" class="com.mme.api.Car" instance="#[vars.car]" acceptSubtypes="false"/>
+		<logger level="INFO" doc:name="Logger" doc:id="61810a6d-80e0-49b0-83c1-7fde46d5375d" message="Validation passed!"/>
+	</flow>
+</mule>

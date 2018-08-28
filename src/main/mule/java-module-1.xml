@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="826c45ff-ec92-49db-bfbe-75c44791814a" >
+		<http:listener-connection port="8081" host="0.0.0.0"/>
+	</http:listener-config>
+	<flow name="java-module_instance" doc:id="dd1889ca-ec4e-48a4-875f-e3263520e2a4" >
+		<http:listener doc:name="Listener" doc:id="b490bb75-7220-4c44-9e25-4f3ef7db2304" config-ref="HTTP_Listener_config" path="/test">
+		</http:listener>
+		<java:new doc:name="Tripler" doc:id="eccb113d-f70a-4b65-a3e8-d36c37840c71" class="com.mme.api.Tripler" constructor="Tripler()" target="tripler"/>
+		<logger level="INFO" doc:name="Tripler Instance" doc:id="70657d56-20fe-4ea0-b40e-4dd843e37551" message="New instance of Tripler is: #[vars.tripler]"/>
+		<java:invoke doc:name="setA" doc:id="4d0cd116-202d-4a56-94f5-7c90fed88f4c" instance="#[vars.tripler]" class="com.mme.api.Tripler" method="setA(int)">
+			<java:args ><![CDATA[#[{arg0: 1}]]]></java:args>
+		</java:invoke>
+		<java:invoke doc:name="triple" doc:id="53fc035f-8266-4d74-8adf-20b8c68ccead" instance="#[vars.tripler]" class="com.mme.api.Tripler" method="triple()" target="result"/>
+		<logger level="INFO" doc:name="Logger" doc:id="a014c969-216e-4951-8a07-4657caecdaab" message="The result of triple was: #[vars.result]"/>
+	</flow>
+</mule>
